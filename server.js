@@ -5,6 +5,10 @@ app.get('/', (req, res) => {
   res.json(['Kopda API service']);
 });
 
+app.get('/health', (req, res) => {
+  res.json(['Kopda API is ready to serve requests']);
+});
+
 app.get('/api/members', (req, res) => {
   res.json([
     {"memberID": 1, "memberName": "Kristianto Lie", "cardNumber": "02029", "workUnit": "BAPEDA"},
