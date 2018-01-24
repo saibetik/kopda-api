@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../app').config;
 const router = require('../app').router;
 
+const User = require('../models/user');
+
 const tokenFromHeader = (req) => {
   if (req.headers.authorization) {
     return req.headers.authorization.replace(/Bearer\s+([\w\.]+)/, '$1')
@@ -30,7 +32,19 @@ const authenticate = (req, res, next) => {
 };
 
 router.post('/user/info', authenticate, (req, res) => {
-  res.json(req.body);
+  User.listAllUsers().then((users) => {
+    res.json({users});
+  }).catch((err) => {
+    res.json({error: 503, message: err});
+  });
+});
+
+router.post('/user/new', authenticate, (req, res) => {
+  User.createNewUser(req.body).then((user) => {
+    res.json({user});
+  }).catch((err) => {
+    res.json({error: 503, message: err});
+  });
 });
 
 router.post('/user/login', (req, res) => {
