@@ -1,5 +1,6 @@
 const express = require('express');
 const router = require('./router');
+const config = require('./app').config;
 
 const app = express();
 
@@ -13,6 +14,6 @@ app.get('/health', (req, res) => {
 
 app.use('/api', router);
 
-app.listen(8080, '0.0.0.0', () => {
-  console.log('kopda-api is running');
+app.listen(config.port, config.host, () => {
+  console.log(`kopda-api is running on ${config.host}:${config.port}`);
 })
