@@ -1,4 +1,9 @@
-const User = require('../app').User;
+const mongoose = require('mongoose');
+
+const User = mongoose.model('User', {
+  username: String,
+  password: String
+});
 
 const createNewUser = (userData) => {
   const user = new User({

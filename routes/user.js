@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../app').config;
 const router = require('../app').router;
-
 const User = require('../models/user');
 
 const tokenFromHeader = (req) => {
@@ -14,20 +13,20 @@ const tokenFromHeader = (req) => {
 
 const createNewToken = (req) => {
   const payload = {username: req.body.username, passwordHash: req.body.passwordHash};
-  return jwt.sign(payload, config.secret, {expiresIn: '1h'});
+  return jwt.sign(payload, config.app.secret, {expiresIn: '1h'});
 };
 
 const authenticate = (req, res, next) => {
   if (req.headers.authorization) {
-    jwt.verify(tokenFromHeader(req), config.secret, (err, decoded) => {
+    jwt.verify(tokenFromHeader(req), config.app.secret, (err, decoded) => {
       if (err) {
-        return res.status(401).send({error: 401, message: 'Unauthorized access.'});
+        return res.status(401).json({error: 401, message: 'Unauthorized access.'});
       } else {
         next();
       }
     });
   } else {
-    return res.status(400).send({error: 400, message: 'Bad request.'});
+    return res.status(400).json({error: 400, message: 'Bad request.'});
   }
 };
 
@@ -35,7 +34,7 @@ router.post('/user/info', authenticate, (req, res) => {
   User.listAllUsers().then((users) => {
     res.json({users});
   }).catch((err) => {
-    res.json({error: 503, message: err});
+    res.status(503).json({error: 503, message: err});
   });
 });
 
@@ -43,7 +42,7 @@ router.post('/user/new', authenticate, (req, res) => {
   User.createNewUser(req.body).then((user) => {
     res.json({user});
   }).catch((err) => {
-    res.json({error: 503, message: err});
+    res.status(503).json({error: 503, message: err});
   });
 });
 
@@ -51,7 +50,7 @@ router.post('/user/login', (req, res) => {
   if (req.body.username && req.body.password) {
     res.json({error: 0, token: createNewToken(req)});
   } else {
-    res.status(401).send({error: 400, message: 'Bad request.'});
+    res.status(401).json({error: 400, message: 'Bad request.'});
   }
 });
 

@@ -14,6 +14,6 @@ app.get('/health', (req, res) => {
 
 app.use('/api', router);
 
-app.listen(config.port, config.host, () => {
-  console.log(`kopda-api is running on ${config.host}:${config.port}`);
+app.listen(config.app.port, config.app.host, () => {
+  console.log(`kopda-api is running on ${config.app.host}:${config.app.port}`);
 })
