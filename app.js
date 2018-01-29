@@ -14,6 +14,8 @@ const config = {
   }
 };
 
+console.log('connect to ');
+console.log(config.db);
 mongoose.connect(`mongodb://${config.db.user}:${config.db.pwd}@${config.db.host}/${config.db.database}`);
 
 const User = mongoose.model('User', {username: String, password: String});
